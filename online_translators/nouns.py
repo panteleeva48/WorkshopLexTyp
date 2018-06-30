@@ -93,6 +93,7 @@ def extract_noun_csv_sheets(excel_file):
     all_worksheets = workbook.sheet_names()
     for worksheet_name in all_worksheets:
         if worksheet_name.startswith('csv'):
+            print(worksheet_name)
             worksheet = workbook.sheet_by_name(worksheet_name)
             questionnaire_typename = os.path.splitext(excel_file.split('\\')[1].split('_')[1])[0]
             csv_name = questionnaire_typename + '_' + '_'.join(worksheet_name.split('_')[1:])

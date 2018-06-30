@@ -11,16 +11,20 @@ def plot_all_accuracy(directory):
     accs = {}
     for root, dirs, filenames in os.walk(directory):
         for filename in filenames:
-            df = pandas.read_pickle(root+filename)
-            language_1, language_2, translator,  *other, field = os.path.splitext(filename)[0].split('_')
-            df_golden = pandas.read_pickle('compatibility_goldens_cache\\' +language_1+'_'+field+ '_golden_df.pkl')
-            df.index.name = ''
-            idx = df_golden.index.difference(df.index)
-            df_golden.drop(idx, inplace=True)
-            cols = df_golden.columns.tolist()
-            cols.sort()
-            acc_curr = (df_golden[cols] == df[cols]).sum().sum()/df_golden.size
-            accs.setdefault(field, {}).setdefault(language_1, {}).setdefault(translator, {})[language_2] = acc_curr
+            try:
+                df = pandas.read_pickle(root+filename)
+                language_1, language_2, translator,  *other, field = os.path.splitext(filename)[0].split('_')
+                df_golden = pandas.read_pickle('compatibility_goldens_cache\\' +language_1+'_'+field+ '_golden_df.pkl')
+                df.index.name = ''
+                idx = df_golden.index.difference(df.index)
+                df_golden.drop(idx, inplace=True)
+                cols = df_golden.columns.tolist()
+                cols.sort()
+                acc_curr = (df_golden[cols] & df[cols]).sum().sum()/df_golden.sum().sum()
+                print((df_golden[cols] == df[cols]).sum().sum(), df_golden.sum().sum())
+                accs.setdefault(field, {}).setdefault(language_1, {}).setdefault(translator, {})[language_2] = acc_curr
+            except KeyError:
+                continue
     print(accs)
     for field, trans_acc in accs.items():
 

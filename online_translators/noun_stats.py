@@ -51,7 +51,7 @@ def create_table(accuracies):
     print(df_sources)
     for field, df_source in df_sources.items():
         d = pandas.DataFrame.from_dict(df_source)
-        d.to_excel('xlsx_accuracy\\' + field + '_translation_noun.xlsx')
+        d.to_excel('xlsx_accuracy\\' + field + '_translation_noun_precision.xlsx')
 
 def plot_all_accuracy(accuracies):
 
@@ -75,11 +75,12 @@ def plot_all_accuracy(accuracies):
         matplotlib.pyplot.savefig(field + '_noun_stats.png')
 
 if __name__ == '__main__':
-    translations = nouns.get_all_questionnaire_translations()
-    with open('cache\\noun_translations.json', 'w', encoding='utf-8') as dump_file:
-        json.dump(translations.field_translation, dump_file, ensure_ascii=False)
+    # translations = nouns.get_all_questionnaire_translations()
+    # with open('cache\\noun_translations.json', 'w', encoding='utf-8') as dump_file:
+    #     json.dump(translations.field_translation, dump_file, ensure_ascii=False)
     with open('cache\\noun_translations.json', 'r', encoding='utf-8') as dump_file:
         translations = json.load(dump_file)
-    acc = count_all_accuracy(translations)
-    #plot_all_accuracy(acc)
-    create_table(acc)
+
+    # acc = count_all_accuracy(translations)
+    # #plot_all_accuracy(acc)
+    # create_table(acc)

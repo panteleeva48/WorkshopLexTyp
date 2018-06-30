@@ -13,7 +13,7 @@ def count_all_accuracy(translations, goldens):
         field, language_1, language_2 = os.path.splitext(filename)[0].split('_')
         for golden_filename, golden_file in goldens.items():
             if golden_filename in filename:
-                accuracy = len(set(translation) & set(golden_file)) / len(translation)
+                accuracy = len(set(translation) & set(golden_file)) / len(golden_file)
                 accuracies.setdefault(field, {}).setdefault(language_1, {})[language_2] = accuracy
                 break
     return accuracies
@@ -32,7 +32,7 @@ def create_table(accuracies):
             index = direction_accuracy.keys()
             print(index)
             for itermediate_language, inter_accuracy in direction_accuracy.items():
-                df_sources.setdefault(field, {}).setdefault(NLTK_LANGUAGE_TAG_MAPPER[source_language], {})[NLTK_LANGUAGE_TAG_MAPPER[itermediate_language]] = inter_accuracy
+                df_sources.setdefault(field, {})[NLTK_LANGUAGE_TAG_MAPPER[source_language] +'_' + NLTK_LANGUAGE_TAG_MAPPER[itermediate_language]] = inter_accuracy
     print(df_sources)
     for field, df_source in df_sources.items():
         d = pandas.DataFrame.from_dict(df_source)
